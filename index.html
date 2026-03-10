@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>sprintcart — Enterprise Customer Engagement Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --blue: #1A6FDB;
+    --blue-dark: #0F4FA0;
+    --blue-light: #E8F1FC;
+    --green: #3DBD6A;
+    --green-dark: #2A9A51;
+    --green-light: #E8F8EE;
+    --dark: #0D1B2A;
+    --mid: #2C3E50;
+    --muted: #637080;
+    --light: #F4F7FB;
+    --white: #FFFFFF;
+    --border: #E2E8F2;
+    --shadow: 0 4px 24px rgba(26,111,219,0.10);
+    --shadow-lg: 0 16px 56px rgba(26,111,219,0.15);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--dark);
+    background: var(--white);
+    overflow-x: hidden;
+  }
+  h1,h2,h3,h4,h5 { font-family: 'Syne', sans-serif; line-height: 1.15; }
+  a { text-decoration: none; color: inherit; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    height: 68px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: box-shadow 0.3s;
+  }
+  nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+  .nav-logo { display: flex; align-items: center; gap: 10px; }
+  .nav-logo .logo-text {
+    font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .nav-logo .logo-text span.blue { color: var(--blue); }
+  .nav-logo .logo-text span.green { color: var(--green); }
+  .nav-logo .logo-badge {
+    font-size: 0.6rem; font-family: 'DM Sans', sans-serif;
+    color: var(--muted); letter-spacing: 0.5px; margin-top: 2px;
+  }
+  .nav-links { display: flex; align-items: center; gap: 2px; }
+  .nav-item { position: relative; }
+  .nav-item > a, .nav-item > span {
+    padding: 8px 14px; font-size: 0.9rem; font-weight: 500;
+    color: var(--mid); border-radius: 8px; cursor: pointer;
+    display: flex; align-items: center; gap: 4px;
+    transition: color 0.2s, background 0.2s;
+  }
+  .nav-item > a:hover, .nav-item > span:hover { color: var(--blue); background: var(--blue-light); }
+  .nav-item .chevron { font-size: 0.65rem; transition: transform 0.2s; }
+  .nav-item:hover .chevron { transform: rotate(180deg); }
+  .dropdown {
+    position: absolute; top: calc(100% + 8px); left: 0;
+    background: white; border: 1px solid var(--border);
+    border-radius: 12px; padding: 8px; min-width: 220px;
+    box-shadow: var(--shadow-lg);
+    opacity: 0; visibility: hidden; transform: translateY(-8px);
+    transition: all 0.2s;
+  }
+  .nav-item:hover .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+  .dropdown a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 8px; font-size: 0.88rem;
+    color: var(--mid); font-weight: 400;
+    transition: background 0.15s, color 0.15s;
+  }
+  .dropdown a:hover { background: var(--blue-light); color: var(--blue); }
+  .dropdown a .dd-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+  .nav-cta {
+    background: var(--blue); color: white !important;
+    padding: 10px 20px !important; border-radius: 8px !important;
+    font-weight: 600 !important; font-size: 0.88rem !important;
+    transition: background 0.2s, transform 0.15s !important;
+  }
+  .nav-cta:hover { background: var(--blue-dark) !important; transform: translateY(-1px); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    padding: 120px 5% 80px;
+    display: flex; align-items: center;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #F0F6FF 0%, #FAFFFE 50%, #F0FFF6 100%);
+  }
+  .hero-bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(26,111,219,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,111,219,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+  .hero-blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); pointer-events: none; opacity: 0.35;
+  }
+  .hero-blob-1 { width: 600px; height: 600px; background: radial-gradient(circle, #1A6FDB33, transparent 70%); top: -100px; right: -100px; }
+  .hero-blob-2 { width: 400px; height: 400px; background: radial-gradient(circle, #3DBD6A22, transparent 70%); bottom: 0; left: 10%; }
+  .hero-content { position: relative; max-width: 700px; animation: fadeUp 0.8s ease both; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: white; border: 1px solid var(--border);
+    border-radius: 100px; padding: 6px 14px 6px 8px;
+    font-size: 0.8rem; font-weight: 500; color: var(--blue);
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(26,111,219,0.08);
+  }
+  .hero-eyebrow .dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.3)} }
+  .hero h1 {
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    font-weight: 800; color: var(--dark);
+    line-height: 1.08; letter-spacing: -1.5px;
+    margin-bottom: 20px;
+  }
+  .hero h1 .accent-blue { color: var(--blue); }
+  .hero h1 .accent-green { color: var(--green); }
+  .hero-sub {
+    font-size: 1.1rem; color: var(--muted); line-height: 1.7;
+    max-width: 560px; margin-bottom: 36px; font-weight: 400;
+  }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 48px; }
+  .btn-primary {
+    background: var(--blue); color: white;
+    padding: 14px 28px; border-radius: 10px;
+    font-weight: 600; font-size: 0.95rem;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(26,111,219,0.3);
+  }
+  .btn-primary:hover { background: var(--blue-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,111,219,0.35); }
+  .btn-secondary {
+    background: white; color: var(--blue);
+    padding: 14px 28px; border-radius: 10px;
+    font-weight: 600; font-size: 0.95rem;
+    border: 1.5px solid var(--blue);
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-secondary:hover { background: var(--blue-light); transform: translateY(-2px); }
+  .hero-trust {
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    padding-top: 24px; border-top: 1px solid var(--border);
+  }
+  .trust-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.82rem; color: var(--muted); font-weight: 500;
+  }
+  .trust-item .ti-icon { font-size: 1rem; }
+  .hero-visual {
+    position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+    width: 44%; max-width: 580px;
+    animation: fadeRight 0.9s 0.2s ease both;
+  }
+  .hero-card-stack { position: relative; }
+  .hero-card {
+    background: white; border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    padding: 20px 24px;
+  }
+  .hero-card-main { position: relative; z-index: 2; }
+  .hero-card-float {
+    position: absolute; background: white;
+    border-radius: 12px; border: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+    padding: 12px 16px;
+    animation: float 4s ease-in-out infinite;
+  }
+  .hero-card-float.f1 { top: -20px; right: -20px; z-index: 3; animation-delay: 0s; }
+  .hero-card-float.f2 { bottom: -20px; left: -20px; z-index: 3; animation-delay: 1.5s; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .product-grid-preview {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .pg-item {
+    background: var(--light); border-radius: 10px; padding: 14px;
+    display: flex; flex-direction: column; gap: 6px;
+    transition: transform 0.2s;
+  }
+  .pg-item:hover { transform: translateY(-2px); }
+  .pg-item .pg-icon { font-size: 1.3rem; }
+  .pg-item .pg-name { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--dark); }
+  .pg-item .pg-desc { font-size: 0.72rem; color: var(--muted); line-height: 1.4; }
+  .fc-label { font-size: 0.7rem; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px; }
+  .fc-value { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--blue); }
+  .fc-sub { font-size: 0.7rem; color: var(--muted); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeRight { from{opacity:0;transform:translate(30px,-50%)} to{opacity:1;transform:translate(0,-50%)} }
+
+  /* ─── LOGOS ─── */
+  .logos-section {
+    background: white; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 48px 5%;
+  }
+  .logos-label {
+    text-align: center; font-size: 0.78rem; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 32px;
+  }
+  .logos-track-wrapper { overflow: hidden; position: relative; }
+  .logos-track-wrapper::before, .logos-track-wrapper::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none;
+  }
+  .logos-track-wrapper::before { left: 0; background: linear-gradient(to right, white, transparent); }
+  .logos-track-wrapper::after { right: 0; background: linear-gradient(to left, white, transparent); }
+  .logos-track {
+    display: flex; gap: 48px; align-items: center;
+    animation: scroll 30s linear infinite;
+    width: max-content;
+  }
+  .logos-track:hover { animation-play-state: paused; }
+  @keyframes scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .logo-item {
+    display: flex; align-items: center; justify-content: center;
+    height: 36px; flex-shrink: 0; opacity: 0.65;
+    filter: grayscale(100%);
+    transition: opacity 0.2s, filter 0.2s;
+  }
+  .logo-item:hover { opacity: 1; filter: grayscale(0%); }
+  .logo-item .logo-pill {
+    background: var(--light); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 16px;
+    font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700;
+    color: var(--mid); white-space: nowrap; letter-spacing: 0.3px;
+  }
+
+  /* ─── SECTIONS COMMON ─── */
+  section { padding: 100px 5%; }
+  .section-eyebrow {
+    display: inline-block;
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--blue);
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 800; color: var(--dark);
+    letter-spacing: -0.8px; line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 1rem; color: var(--muted); line-height: 1.7;
+    max-width: 560px; margin-bottom: 56px;
+  }
+  .section-header-center { text-align: center; }
+  .section-header-center .section-sub { margin: 0 auto 56px; }
+
+  /* ─── INSIGHT / DATA HOOK ─── */
+  .insight-section {
+    background: var(--dark);
+    padding: 80px 5%;
+    position: relative; overflow: hidden;
+  }
+  .insight-section::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(26,111,219,0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .insight-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    position: relative;
+  }
+  .insight-left .insight-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 100px; padding: 5px 12px;
+    font-size: 0.75rem; color: #89BFFF; font-weight: 500;
+    margin-bottom: 20px; letter-spacing: 0.5px;
+  }
+  .insight-left h2 {
+    font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 800;
+    color: white; letter-spacing: -0.8px; margin-bottom: 16px;
+  }
+  .insight-left h2 span { color: var(--green); }
+  .insight-left p { font-size: 0.95rem; color: rgba(255,255,255,0.6); line-height: 1.75; margin-bottom: 28px; }
+  .insight-left .insight-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--green); font-weight: 600; font-size: 0.9rem;
+    border-bottom: 1px solid rgba(61,189,106,0.4);
+    padding-bottom: 2px; transition: gap 0.2s;
+  }
+  .insight-left .insight-cta:hover { gap: 12px; }
+  .insight-stats { display: flex; flex-direction: column; gap: 20px; }
+  .insight-stat-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px; padding: 24px 28px;
+    display: flex; align-items: center; gap: 20px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .insight-stat-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+  .insight-stat-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.8rem; font-weight: 800;
+    line-height: 1; min-width: 100px;
+  }
+  .insight-stat-number.blue { color: #89BFFF; }
+  .insight-stat-number.green { color: var(--green); }
+  .insight-stat-number.orange { color: #FFB347; }
+  .insight-stat-text { color: rgba(255,255,255,0.7); font-size: 0.9rem; line-height: 1.5; }
+  .insight-stat-text strong { color: white; }
+
+  /* ─── PRODUCTS ─── */
+  .products-section { background: var(--light); }
+  .products-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .product-card {
+    background: white; border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 36px; position: relative; overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+  .product-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    border-radius: 20px 20px 0 0;
+  }
+  .product-card.pc-blue::before { background: linear-gradient(90deg, var(--blue), #64B5F6); }
+  .product-card.pc-green::before { background: linear-gradient(90deg, var(--green), #81C784); }
+  .product-card.pc-teal::before { background: linear-gradient(90deg, #00897B, #26C6DA); }
+  .product-card.pc-orange::before { background: linear-gradient(90deg, #F57C00, #FFB74D); }
+  .product-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+  .pc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+  .pc-logo-badge {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+  }
+  .pc-logo-badge.blue { background: var(--blue-light); }
+  .pc-logo-badge.green { background: var(--green-light); }
+  .pc-logo-badge.teal { background: #E0F7F5; }
+  .pc-logo-badge.orange { background: #FFF3E0; }
+  .pc-tag {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; padding: 4px 10px; border-radius: 100px;
+  }
+  .pc-tag.blue { background: var(--blue-light); color: var(--blue); }
+  .pc-tag.green { background: var(--green-light); color: var(--green-dark); }
+  .pc-tag.teal { background: #E0F7F5; color: #00695C; }
+  .pc-tag.orange { background: #FFF3E0; color: #E65100; }
+  .pc-name { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--dark); margin-bottom: 6px; }
+  .pc-tagline { font-size: 0.82rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .pc-desc { font-size: 0.92rem; color: var(--muted); line-height: 1.65; margin-bottom: 24px; }
+  .pc-features { display: flex; flex-direction: column; gap: 8px; margin-bottom: 28px; }
+  .pc-feature {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.85rem; color: var(--mid);
+  }
+  .pc-feature::before { content: '✓'; font-weight: 700; font-size: 0.8rem; flex-shrink: 0; }
+  .pc-feature.blue::before { color: var(--blue); }
+  .pc-feature.green::before { color: var(--green); }
+  .pc-feature.teal::before { color: #00897B; }
+  .pc-feature.orange::before { color: #F57C00; }
+  .pc-cta {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.88rem; font-weight: 600;
+    transition: gap 0.2s;
+  }
+  .pc-cta.blue { color: var(--blue); }
+  .pc-cta.green { color: var(--green-dark); }
+  .pc-cta.teal { color: #00897B; }
+  .pc-cta.orange { color: #E65100; }
+  .pc-cta:hover { gap: 10px; }
+
+  /* ─── ICP / WHO IS IT FOR ─── */
+  .icp-section { background: white; }
+  .icp-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .icp-card {
+    border: 1.5px solid var(--border); border-radius: 16px;
+    padding: 32px; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .icp-card:hover { border-color: var(--blue); transform: translateY(-4px); box-shadow: var(--shadow); }
+  .icp-icon {
+    width: 56px; height: 56px; border-radius: 16px; display: flex;
+    align-items: center; justify-content: center; font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
+  .icp-icon.blue { background: var(--blue-light); }
+  .icp-icon.green { background: var(--green-light); }
+  .icp-icon.purple { background: #F3E8FF; }
+  .icp-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 10px; }
+  .icp-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.65; margin-bottom: 20px; }
+  .icp-use-cases { display: flex; flex-direction: column; gap: 6px; }
+  .icp-use { font-size: 0.8rem; color: var(--mid); display: flex; align-items: center; gap: 6px; }
+  .icp-use::before { content: '→'; color: var(--blue); font-weight: 700; }
+
+  /* ─── STATS ─── */
+  .stats-section {
+    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 100%);
+    padding: 72px 5%;
+    position: relative; overflow: hidden;
+  }
+  .stats-section::before {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    max-width: 1000px; margin: 0 auto;
+    position: relative;
+  }
+  .stat-item {
+    text-align: center; padding: 20px;
+    border-right: 1px solid rgba(255,255,255,0.15);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-number {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 800;
+    color: white; line-height: 1; margin-bottom: 8px;
+  }
+  .stat-number span { color: var(--green); }
+  .stat-label { font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.4; font-weight: 400; }
+
+  /* ─── SECURITY ─── */
+  .security-section { background: var(--light); }
+  .security-inner { max-width: 1200px; margin: 0 auto; }
+  .security-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+  }
+  .security-card {
+    background: white; border: 1px solid var(--border);
+    border-radius: 14px; padding: 28px 24px; text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .security-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .security-card .sc-icon { font-size: 2rem; margin-bottom: 12px; }
+  .security-card h4 { font-size: 0.9rem; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+  .security-card p { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+  .iso-badge {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    background: white; border: 1.5px solid var(--green);
+    border-radius: 14px; padding: 20px 32px; margin-top: 24px;
+    max-width: 420px; margin: 32px auto 0;
+  }
+  .iso-badge .iso-icon { font-size: 2rem; }
+  .iso-badge .iso-text h4 { font-size: 0.9rem; font-weight: 700; color: var(--dark); }
+  .iso-badge .iso-text p { font-size: 0.78rem; color: var(--muted); }
+
+  /* ─── FAQ ─── */
+  .faq-section { background: white; }
+  .faq-inner { max-width: 800px; margin: 0 auto; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 22px 0; cursor: pointer;
+  }
+  .faq-item:first-child { border-top: 1px solid var(--border); }
+  .faq-q {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px;
+  }
+  .faq-q span { font-weight: 600; font-size: 0.95rem; color: var(--dark); line-height: 1.4; }
+  .faq-toggle {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--light); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; color: var(--blue); flex-shrink: 0;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .faq-item.open .faq-toggle { background: var(--blue); color: white; transform: rotate(45deg); }
+  .faq-a {
+    font-size: 0.88rem; color: var(--muted); line-height: 1.75;
+    max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s;
+    padding-top: 0;
+  }
+  .faq-item.open .faq-a { max-height: 200px; padding-top: 14px; }
+
+  /* ─── CTA BANNER ─── */
+  .cta-section {
+    background: var(--dark); padding: 100px 5%;
+    position: relative; overflow: hidden;
+    text-align: center;
+  }
+  .cta-section::before {
+    content: ''; position: absolute;
+    width: 700px; height: 700px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(26,111,219,0.2), transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .cta-section h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800;
+    color: white; letter-spacing: -1px; margin-bottom: 16px;
+    position: relative;
+  }
+  .cta-section h2 span { color: var(--green); }
+  .cta-section p {
+    font-size: 1rem; color: rgba(255,255,255,0.6);
+    margin-bottom: 40px; position: relative;
+  }
+  .cta-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative; }
+  .btn-white {
+    background: white; color: var(--blue);
+    padding: 14px 28px; border-radius: 10px;
+    font-weight: 700; font-size: 0.95rem;
+    transition: transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.25); }
+  .btn-ghost {
+    background: transparent; color: white;
+    padding: 14px 28px; border-radius: 10px;
+    font-weight: 600; font-size: 0.95rem;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
+  .cta-contact {
+    margin-top: 40px; display: flex; gap: 28px; justify-content: center;
+    flex-wrap: wrap; position: relative;
+  }
+  .cta-contact a {
+    color: rgba(255,255,255,0.5); font-size: 0.85rem;
+    display: flex; align-items: center; gap: 6px;
+    transition: color 0.2s;
+  }
+  .cta-contact a:hover { color: white; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #080F18; padding: 64px 5% 32px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+    margin-bottom: 56px;
+  }
+  .footer-brand .fb-logo {
+    font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800;
+    margin-bottom: 10px;
+  }
+  .footer-brand .fb-logo .blue { color: var(--blue); }
+  .footer-brand .fb-logo .green { color: var(--green); }
+  .footer-brand p {
+    font-size: 0.83rem; color: rgba(255,255,255,0.4); line-height: 1.65;
+    margin-bottom: 20px; max-width: 280px;
+  }
+  .footer-socials { display: flex; gap: 8px; }
+  .social-btn {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; color: rgba(255,255,255,0.5);
+    transition: background 0.2s, color 0.2s;
+  }
+  .social-btn:hover { background: var(--blue); color: white; border-color: var(--blue); }
+  .footer-col h5 {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: rgba(255,255,255,0.3);
+    margin-bottom: 18px;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col ul li a {
+    font-size: 0.85rem; color: rgba(255,255,255,0.5);
+    transition: color 0.2s;
+  }
+  .footer-col ul li a:hover { color: white; }
+  .footer-bottom {
+    padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-bottom p { font-size: 0.78rem; color: rgba(255,255,255,0.25); }
+  .footer-iso {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px; padding: 6px 12px;
+    font-size: 0.72rem; color: rgba(255,255,255,0.4);
+  }
+  .footer-iso .iso-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
+
+  /* ─── SCROLL ANIMATIONS ─── */
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1024px) {
+    .hero-visual { display: none; }
+    .hero-content { max-width: 100%; }
+    .products-grid { grid-template-columns: 1fr; }
+    .insight-inner { grid-template-columns: 1fr; gap: 40px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .security-grid { grid-template-columns: repeat(2,1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .icp-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .security-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── NAVIGATION ─── -->
+<nav id="navbar">
+  <div class="nav-logo">
+    <div>
+      <div class="logo-text"><span class="blue">sprint</span><span class="green">cart</span>™</div>
+      <div class="logo-badge">Enterprise Customer Engagement Platform</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <div class="nav-item">
+      <span>Solutions <span class="chevron">▾</span></span>
+      <div class="dropdown">
+        <a href="#"><span class="dd-icon" style="background:#E8F1FC">💡</span> Genius Card<br><small style="color:var(--muted);font-size:0.72rem">NFC Digital Engagement</small></a>
+        <a href="#"><span class="dd-icon" style="background:#E8F1FC">🔒</span> DigiSafe<br><small style="color:var(--muted);font-size:0.72rem">Digital Asset Management</small></a>
+        <a href="#"><span class="dd-icon" style="background:#E8F8EE">📦</span> Supply Junction<br><small style="color:var(--muted);font-size:0.72rem">Procurement Management</small></a>
+        <a href="#"><span class="dd-icon" style="background:#FFF3E0">🎁</span> Jubilee<br><small style="color:var(--muted);font-size:0.72rem">Rewards & Loyalty</small></a>
+      </div>
+    </div>
+    <div class="nav-item"><a href="#">Why Sprintcart</a></div>
+    <div class="nav-item"><a href="#">Clients</a></div>
+    <div class="nav-item"><a href="#">Resources</a></div>
+    <div class="nav-item"><a href="#">Contact</a></div>
+    <div class="nav-item"><a href="#" class="nav-cta">Book a Demo</a></div>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero" id="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="dot"></span>
+      Enterprise Customer Engagement Platform
+    </div>
+    <h1>
+      Engage. Automate.<br>
+      <span class="accent-blue">Grow</span> at Enterprise<br>
+      <span class="accent-green">Scale.</span>
+    </h1>
+    <p class="hero-sub">
+      India's only integrated Martech platform covering the entire customer lifecycle — built for BFSI enterprises with large, distributed channel networks. Boost LTV by 40%+.
+    </p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">📅 Book a Demo</a>
+      <a href="#products" class="btn-secondary">Explore Solutions →</a>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-item"><span class="ti-icon">🔒</span> ISO 27001:2022 Certified</div>
+      <div class="trust-item"><span class="ti-icon">🏦</span> 12+ BFSI Clients</div>
+      <div class="trust-item"><span class="ti-icon">🔄</span> 90%+ Annual Renewals</div>
+      <div class="trust-item"><span class="ti-icon">🌏</span> Mumbai · UAE · USA · Canada</div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card-stack">
+      <div class="hero-card hero-card-main">
+        <div class="product-grid-preview">
+          <div class="pg-item">
+            <span class="pg-icon">💡</span>
+            <span class="pg-name">Genius Card</span>
+            <span class="pg-desc">NFC engagement & lead automation</span>
+          </div>
+          <div class="pg-item">
+            <span class="pg-icon">🔒</span>
+            <span class="pg-name">DigiSafe</span>
+            <span class="pg-desc">Digital asset management platform</span>
+          </div>
+          <div class="pg-item">
+            <span class="pg-icon">📦</span>
+            <span class="pg-name">Supply Junction</span>
+            <span class="pg-desc">Enterprise procurement system</span>
+          </div>
+          <div class="pg-item">
+            <span class="pg-icon">🎁</span>
+            <span class="pg-name">Jubilee</span>
+            <span class="pg-desc">Rewards & loyalty automation</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-card-float f1">
+        <div class="fc-label">Annual Renewals</div>
+        <div class="fc-value">90%<span style="color:var(--green);font-size:1rem">+</span></div>
+        <div class="fc-sub">Client retention rate</div>
+      </div>
+      <div class="hero-card-float f2">
+        <div class="fc-label">LTV Boost</div>
+        <div class="fc-value">40%<span style="color:var(--green);font-size:1rem">+</span></div>
+        <div class="fc-sub">via lifecycle coverage</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CLIENT LOGOS ─── -->
+<div class="logos-section">
+  <div class="logos-label">Trusted by India's Leading Financial Institutions</div>
+  <div class="logos-track-wrapper">
+    <div class="logos-track" id="logoTrack">
+      <div class="logo-item"><div class="logo-pill">Aditya Birla Capital</div></div>
+      <div class="logo-item"><div class="logo-pill">SBI Life</div></div>
+      <div class="logo-item"><div class="logo-pill">HDFC Bank</div></div>
+      <div class="logo-item"><div class="logo-pill">ICICI Prudential MF</div></div>
+      <div class="logo-item"><div class="logo-pill">Kotak Mahindra Bank</div></div>
+      <div class="logo-item"><div class="logo-pill">Bajaj Mutual Fund</div></div>
+      <div class="logo-item"><div class="logo-pill">DSP Mutual Fund</div></div>
+      <div class="logo-item"><div class="logo-pill">Nippon India MF</div></div>
+      <div class="logo-item"><div class="logo-pill">Bandhan AMC</div></div>
+      <div class="logo-item"><div class="logo-pill">Turtlemint</div></div>
+      <div class="logo-item"><div class="logo-pill">SBI General</div></div>
+      <div class="logo-item"><div class="logo-pill">Ageas Federal Life</div></div>
+      <div class="logo-item"><div class="logo-pill">Bajaj General</div></div>
+      <!-- Duplicate for seamless scroll -->
+      <div class="logo-item"><div class="logo-pill">Aditya Birla Capital</div></div>
+      <div class="logo-item"><div class="logo-pill">SBI Life</div></div>
+      <div class="logo-item"><div class="logo-pill">HDFC Bank</div></div>
+      <div class="logo-item"><div class="logo-pill">ICICI Prudential MF</div></div>
+      <div class="logo-item"><div class="logo-pill">Kotak Mahindra Bank</div></div>
+      <div class="logo-item"><div class="logo-pill">Bajaj Mutual Fund</div></div>
+      <div class="logo-item"><div class="logo-pill">DSP Mutual Fund</div></div>
+      <div class="logo-item"><div class="logo-pill">Nippon India MF</div></div>
+      <div class="logo-item"><div class="logo-pill">Bandhan AMC</div></div>
+      <div class="logo-item"><div class="logo-pill">Turtlemint</div></div>
+      <div class="logo-item"><div class="logo-pill">SBI General</div></div>
+      <div class="logo-item"><div class="logo-pill">Ageas Federal Life</div></div>
+      <div class="logo-item"><div class="logo-pill">Bajaj General</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── INDUSTRY INSIGHT ─── -->
+<div class="insight-section">
+  <div class="insight-inner">
+    <div class="insight-left reveal">
+      <div class="insight-tag">📊 BFSI Industry Reality</div>
+      <h2>The hidden revenue<br>problem in <span>BFSI</span></h2>
+      <p>85% of topline revenue in BFSI is driven by channel sales. Yet the vast majority of channel partners remain dormant or underperforming — not because of distribution gaps, but because of an engagement, enablement, and productivity problem.</p>
+      <a href="#" class="insight-cta">See how sprintcart solves this →</a>
+    </div>
+    <div class="insight-stats">
+      <div class="insight-stat-card reveal reveal-delay-1">
+        <div class="insight-stat-number blue">85%</div>
+        <div class="insight-stat-text"><strong>of BFSI topline</strong> is driven by channel sales, making partner enablement the single most critical lever for revenue growth.</div>
+      </div>
+      <div class="insight-stat-card reveal reveal-delay-2">
+        <div class="insight-stat-number orange">88%</div>
+        <div class="insight-stat-text"><strong>of channel partners</strong> are dormant or underperforming — an untapped pool of revenue potential waiting to be activated.</div>
+      </div>
+      <div class="insight-stat-card reveal reveal-delay-3">
+        <div class="insight-stat-number green">40%<span style="font-size:1.5rem">+</span></div>
+        <div class="insight-stat-text"><strong>LTV boost</strong> achieved by enterprises using sprintcart's full lifecycle engagement platform.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PRODUCTS ─── -->
+<section class="products-section" id="products">
+  <div class="section-header-center reveal">
+    <span class="section-eyebrow">Our Solution Ecosystem</span>
+    <h2 class="section-title">One Platform. Four Powerful Solutions.</h2>
+    <p class="section-sub">Each solution solves a specific enterprise challenge. Together, they power engagement, efficiency, and growth at scale.</p>
+  </div>
+  <div class="products-grid">
+    <div class="product-card pc-blue reveal reveal-delay-1">
+      <div class="pc-header">
+        <div class="pc-logo-badge blue">💡</div>
+        <span class="pc-tag blue">Digital Engagement</span>
+      </div>
+      <div class="pc-name">Genius Card</div>
+      <div class="pc-tagline">Turning First Meetings into Conversions</div>
+      <p class="pc-desc">An NFC-enabled digital business card that goes far beyond contact sharing — it captures leads, automates follow-ups, tracks interactions, and integrates with CRM, WhatsApp, and email.</p>
+      <div class="pc-features">
+        <div class="pc-feature blue">Captures leads instantly via NFC tap</div>
+        <div class="pc-feature blue">Automates follow-ups & interaction tracking</div>
+        <div class="pc-feature blue">Integrates with CRM, WhatsApp & email</div>
+        <div class="pc-feature blue">Face recognition & fintech-enabled utility</div>
+      </div>
+      <a href="#" class="pc-cta blue">Explore Genius Card →</a>
+    </div>
+    <div class="product-card pc-green reveal reveal-delay-2">
+      <div class="pc-header">
+        <div class="pc-logo-badge green">🔒</div>
+        <span class="pc-tag green">Asset Management</span>
+      </div>
+      <div class="pc-name">DigiSafe</div>
+      <div class="pc-tagline">Digital Asset Management Reimagined</div>
+      <p class="pc-desc">A centralized digital repository for storing, co-branding, and distributing assets across your entire partner network — with AI-powered multilingual content and enterprise-grade broadcast tools.</p>
+      <div class="pc-features">
+        <div class="pc-feature green">Centralized asset repo with secure co-branding</div>
+        <div class="pc-feature green">Email & WhatsApp broadcast via DigiConnect</div>
+        <div class="pc-feature green">Partner-led social amplification (DigiSocial)</div>
+        <div class="pc-feature green">AI-powered multilingual content (DigiBhasha)</div>
+      </div>
+      <a href="#" class="pc-cta green">Explore DigiSafe →</a>
+    </div>
+    <div class="product-card pc-teal reveal reveal-delay-1">
+      <div class="pc-header">
+        <div class="pc-logo-badge teal">📦</div>
+        <span class="pc-tag teal">Procurement</span>
+      </div>
+      <div class="pc-name">Supply Junction</div>
+      <div class="pc-tagline">From Demand to Delivery</div>
+      <p class="pc-desc">An enterprise procurement management platform that digitizes the entire indent-to-fulfilment lifecycle — with multi-level approvals, real-time tracking, and 7-layer MIS analytics.</p>
+      <div class="pc-features">
+        <div class="pc-feature teal">Web-to-procure workflows with multi-level approvals</div>
+        <div class="pc-feature teal">Inventory & logistics management nationwide</div>
+        <div class="pc-feature teal">Real-time notifications & spend analytics</div>
+        <div class="pc-feature teal">Supports 100–50,000 employees across verticals</div>
+      </div>
+      <a href="#" class="pc-cta teal">Explore Supply Junction →</a>
+    </div>
+    <div class="product-card pc-orange reveal reveal-delay-2">
+      <div class="pc-header">
+        <div class="pc-logo-badge orange">🎁</div>
+        <span class="pc-tag orange">Loyalty & Rewards</span>
+      </div>
+      <div class="pc-name">Jubilee</div>
+      <div class="pc-tagline">Engagement that Builds Loyalty</div>
+      <p class="pc-desc">Automate rewards, occasions, and celebrations at scale. Jubilee delivers personalized gifting, incentives, and brand-led engagement across your sales teams, channel partners, and customers.</p>
+      <div class="pc-features">
+        <div class="pc-feature orange">Automates rewards, occasions & celebrations (ROC)</div>
+        <div class="pc-feature orange">700+ SKUs with customized branding & wrapping</div>
+        <div class="pc-feature orange">Manages incentives, points & payouts</div>
+        <div class="pc-feature orange">Last-mile delivery across India & international</div>
+      </div>
+      <a href="#" class="pc-cta orange">Explore Jubilee →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── WHO IS IT FOR ─── -->
+<section class="icp-section">
+  <div class="section-header-center reveal">
+    <span class="section-eyebrow">Who It's Built For</span>
+    <h2 class="section-title">Designed for Enterprise Teams<br>Managing at Scale</h2>
+    <p class="section-sub">sprintcart is purpose-built for organizations in BFSI and beyond, with large distributed networks where engagement, procurement, and loyalty happen at scale.</p>
+  </div>
+  <div class="icp-grid">
+    <div class="icp-card reveal reveal-delay-1">
+      <div class="icp-icon blue">🏦</div>
+      <h3>BFSI Enterprises</h3>
+      <p>Banks, mutual funds, insurance companies, and NBFCs with nationwide channel partner networks seeking to digitize and activate their distribution ecosystem.</p>
+      <div class="icp-use-cases">
+        <div class="icp-use">Re-activate dormant channel partners</div>
+        <div class="icp-use">Digitize agent onboarding & engagement</div>
+        <div class="icp-use">Automate compliance-grade asset distribution</div>
+      </div>
+    </div>
+    <div class="icp-card reveal reveal-delay-2">
+      <div class="icp-icon green">📊</div>
+      <h3>Sales & Marketing Teams</h3>
+      <p>Heads of sales, marketing, and channel management who need consistent brand communication, lead automation, and measurable partner engagement at scale.</p>
+      <div class="icp-use-cases">
+        <div class="icp-use">Standardize brand collateral across regions</div>
+        <div class="icp-use">Track engagement & optimize campaigns</div>
+        <div class="icp-use">Automate lead capture & follow-up workflows</div>
+      </div>
+    </div>
+    <div class="icp-card reveal reveal-delay-3">
+      <div class="icp-icon purple">🏭</div>
+      <h3>Operations & Procurement</h3>
+      <p>Operations heads and procurement managers at enterprises with multi-branch, multi-city footprints who need to streamline indenting, approvals, and fulfilment.</p>
+      <div class="icp-use-cases">
+        <div class="icp-use">Eliminate manual spreadsheet-driven procurement</div>
+        <div class="icp-use">Multi-level approvals with real-time visibility</div>
+        <div class="icp-use">Nationwide last-mile delivery fulfilment</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── STATS ─── -->
+<div class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-item reveal">
+      <div class="stat-number">12<span>+</span></div>
+      <div class="stat-label">Leading BFSI Clients<br>across India</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-1">
+      <div class="stat-number">90<span>%+</span></div>
+      <div class="stat-label">Annual Client<br>Renewal Rate</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-2">
+      <div class="stat-number">40<span>%+</span></div>
+      <div class="stat-label">Customer LTV<br>Boost</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-3">
+      <div class="stat-number">4</div>
+      <div class="stat-label">Enterprise SaaS<br>Products</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECURITY ─── -->
+<section class="security-section">
+  <div class="security-inner">
+    <div class="section-header-center reveal">
+      <span class="section-eyebrow">Security & Compliance</span>
+      <h2 class="section-title">Enterprise-Grade Security<br>You Can Trust</h2>
+      <p class="section-sub">Built for regulated BFSI environments. sprintcart is designed to meet the strictest data security and compliance requirements.</p>
+    </div>
+    <div class="security-grid">
+      <div class="security-card reveal reveal-delay-1">
+        <div class="sc-icon">🛡️</div>
+        <h4>ISO 27001:2022 Certified</h4>
+        <p>International standard for information security management, ensuring enterprise-grade data protection.</p>
+      </div>
+      <div class="security-card reveal reveal-delay-2">
+        <div class="sc-icon">🔐</div>
+        <h4>Role-Based Access Control</h4>
+        <p>Granular permission management ensuring the right people access the right data at all times.</p>
+      </div>
+      <div class="security-card reveal reveal-delay-3">
+        <div class="sc-icon">📋</div>
+        <h4>Audit Logs & Compliance</h4>
+        <p>Complete audit trails for every action, designed to meet BFSI regulatory and compliance requirements.</p>
+      </div>
+      <div class="security-card reveal reveal-delay-4">
+        <div class="sc-icon">☁️</div>
+        <h4>Secure Data Residency</h4>
+        <p>Your data stays within your defined boundaries. Enterprise-grade encryption at rest and in transit.</p>
+      </div>
+    </div>
+    <div class="iso-badge reveal">
+      <div class="iso-icon">✅</div>
+      <div class="iso-text">
+        <h4>ISO/IEC 27001:2022 Certified</h4>
+        <p>Pentaforce Digital Solutions Pvt. Ltd. · Verified Certification</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FAQ ─── -->
+<section class="faq-section">
+  <div class="section-header-center reveal">
+    <span class="section-eyebrow">FAQ</span>
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <p class="section-sub">Everything you need to know before getting started with sprintcart.</p>
+  </div>
+  <div class="faq-inner">
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><span>What industries does sprintcart serve?</span><div class="faq-toggle">+</div></div>
+      <div class="faq-a">sprintcart is purpose-built for the BFSI sector — serving banks, mutual funds, insurance companies, and NBFCs with large, distributed channel networks. Our solutions are also adaptable for enterprises in other sectors that manage nationwide distribution and partner engagement at scale.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><span>Are the 4 products sold together or can we subscribe individually?</span><div class="faq-toggle">+</div></div>
+      <div class="faq-a">Each of sprintcart's four solutions — Genius Card, DigiSafe, Supply Junction, and Jubilee — can be deployed independently based on your business need. Many clients start with one product and expand into the full ecosystem as they scale. Together, they form an integrated engagement and operations platform.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><span>How long does onboarding typically take?</span><div class="faq-toggle">+</div></div>
+      <div class="faq-a">Onboarding timelines vary by product and organization size. Genius Card can be deployed within days for individual teams. DigiSafe and Jubilee typically go live in 2–4 weeks. Supply Junction, given its procurement workflow integrations, may take 4–8 weeks for full enterprise rollout. Our team handles end-to-end onboarding.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><span>Is sprintcart compliant with BFSI data security regulations?</span><div class="faq-toggle">+</div></div>
+      <div class="faq-a">Yes. sprintcart is ISO/IEC 27001:2022 certified, which is the international benchmark for information security management. The platform includes role-based access controls, complete audit logs, encrypted data storage and transit, and is designed to align with RBI and IRDAI data governance guidelines.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><span>Does sprintcart support regional languages?</span><div class="faq-toggle">+</div></div>
+      <div class="faq-a">Yes. DigiSafe includes DigiBhasha — an AI-powered multilingual content engine that automatically translates and adapts marketing materials into regional languages. This is especially valuable for BFSI enterprises reaching channel partners and customers across diverse linguistic geographies in India.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><span>What is the minimum organization size to use sprintcart?</span><div class="faq-toggle">+</div></div>
+      <div class="faq-a">sprintcart is built for mid-to-large enterprises, typically those with 100+ employees or 50+ channel partners in their network. Supply Junction, for instance, is designed to serve indent requests from 100 to 50,000 employees. If you're unsure whether it's the right fit, book a demo and our team will assess your needs honestly.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><span>Does sprintcart offer a free trial or proof of concept?</span><div class="faq-toggle">+</div></div>
+      <div class="faq-a">We offer a structured product demo and, for qualifying enterprises, a scoped proof-of-concept engagement. This helps both parties evaluate the fit before a full deployment. Book a demo to start the conversation — our team will walk you through the relevant product in your context.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA BANNER ─── -->
+<section class="cta-section">
+  <h2>Let's Build <span>Smarter Engagement.</span></h2>
+  <p>Join 12+ leading BFSI institutions already powering their channel networks with sprintcart.</p>
+  <div class="cta-buttons">
+    <a href="#" class="btn-white">📅 Book a Demo</a>
+    <a href="#products" class="btn-ghost">Explore Solutions →</a>
+    <a href="#" class="btn-ghost">Talk to Sales</a>
+  </div>
+  <div class="cta-contact">
+    <a href="mailto:info@sprintcart.in">✉️ info@sprintcart.in</a>
+    <a href="tel:+919820288250">📞 +91 98202 88250</a>
+    <a href="https://sprintcart.in">🌐 www.sprintcart.in</a>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="fb-logo"><span class="blue">sprint</span><span class="green">cart</span>™</div>
+      <p>India's only integrated Martech platform covering the entire customer lifecycle — powering engagement, efficiency, and growth for enterprises with large, distributed networks.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-btn">in</a>
+        <a href="#" class="social-btn">𝕏</a>
+        <a href="#" class="social-btn">f</a>
+        <a href="#" class="social-btn">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Solutions</h5>
+      <ul>
+        <li><a href="#">Genius Card</a></li>
+        <li><a href="#">DigiSafe</a></li>
+        <li><a href="#">Supply Junction</a></li>
+        <li><a href="#">Jubilee</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Clients</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Book a Demo</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Legal</h5>
+      <ul>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Refund Policy</a></li>
+        <li><a href="#">Shipping Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2022–25 Pentaforce Digital Solutions Pvt. Ltd. All rights reserved.</p>
+    <div class="footer-iso">
+      <span class="iso-dot"></span>
+      ISO/IEC 27001:2022 Certified
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll effect
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // FAQ toggle
+  function toggleFaq(item) {
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+</script>
+</body>
+</html>
