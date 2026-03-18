@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Supply Junction — Enterprise Procurement Management | sprintcart</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Epilogue:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0B1E3D;--navy-mid:#132A52;--navy-light:#1C3868;
+  --amber:#F59E0B;--amber-dark:#D97706;--amber-light:#FEF3C7;
+  --green:#16A34A;--green-light:#DCFCE7;
+  --sc-blue:#1A6FDB;--sc-green:#3DBD6A;
+  --dark:#0B1E3D;--mid:#2D4A7A;--muted:#6B8CB8;
+  --light:#F0F4FA;--white:#FFFFFF;--border:#CBD8F0;
+  --shadow:0 4px 24px rgba(11,30,61,.10);
+  --shadow-lg:0 20px 60px rgba(11,30,61,.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Epilogue',sans-serif;color:var(--dark);background:var(--white);overflow-x:hidden}
+h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;line-height:1.1}
+a{text-decoration:none;color:inherit}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 5%;height:68px;display:flex;align-items:center;justify-content:space-between;transition:box-shadow .3s}
+nav.scrolled{box-shadow:0 2px 24px rgba(0,0,0,.07)}
+.lt{font-family:'Bricolage Grotesque',sans-serif;font-size:1.45rem;font-weight:800;letter-spacing:-.5px}
+.lt .b{color:var(--sc-blue)}.lt .g{color:var(--sc-green)}
+.lb{font-size:.6rem;color:var(--muted);letter-spacing:.5px}
+.nr{display:flex;align-items:center;gap:12px}
+.nbk{font-size:.84rem;color:var(--muted);display:flex;align-items:center;gap:5px;padding:8px 14px;border-radius:8px;transition:background .2s;font-weight:500}
+.nbk:hover{background:var(--amber-light);color:var(--amber-dark)}
+.nct{background:var(--amber);color:var(--navy);padding:10px 20px;border-radius:8px;font-weight:700;font-size:.88rem;transition:background .2s,transform .15s;font-family:'Bricolage Grotesque',sans-serif}
+.nct:hover{background:var(--amber-dark);transform:translateY(-1px)}
+
+/* HERO */
+.hero{min-height:100vh;padding:110px 5% 80px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;overflow:hidden;background:var(--navy)}
+.hero::before{content:'';position:absolute;top:-80px;right:-60px;width:700px;height:700px;background:radial-gradient(ellipse,rgba(245,158,11,.08) 0%,transparent 65%);border-radius:50%;pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(245,158,11,.3),transparent)}
+.hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(245,158,11,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(245,158,11,.04) 1px,transparent 1px);background-size:52px 52px;pointer-events:none}
+.hl{position:relative;z-index:1;animation:fu .8s ease both}
+.hr{position:relative;z-index:1;animation:fir .9s .2s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fir{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+.bc{display:flex;align-items:center;gap:5px;font-size:.77rem;color:rgba(255,255,255,.4);margin-bottom:20px}
+.bc .cur{color:var(--amber);font-weight:600}
+.hbg{display:inline-flex;align-items:center;gap:8px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);border-radius:100px;padding:6px 14px 6px 8px;font-size:.77rem;font-weight:600;color:var(--amber);margin-bottom:22px}
+.bdot{width:6px;height:6px;background:var(--amber);border-radius:50%;animation:bp 2s infinite}
+@keyframes bp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+.hero h1{font-size:clamp(2.6rem,4.5vw,4rem);font-weight:800;letter-spacing:-2px;color:white;line-height:1.04;margin-bottom:10px}
+.hero h1 .ac{color:var(--amber)}
+.htag{font-size:.95rem;font-weight:500;color:rgba(255,255,255,.5);margin-bottom:20px}
+.hero-sub{font-size:1rem;color:rgba(255,255,255,.7);line-height:1.75;max-width:520px;margin-bottom:32px}
+.ha{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:36px}
+.bpa{background:var(--amber);color:var(--navy);padding:13px 26px;border-radius:10px;font-weight:700;font-size:.92rem;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(245,158,11,.3);transition:background .2s,transform .15s;font-family:'Bricolage Grotesque',sans-serif}
+.bpa:hover{background:var(--amber-dark);transform:translateY(-2px)}
+.boa{background:transparent;color:white;padding:13px 26px;border-radius:10px;font-weight:600;font-size:.92rem;border:1.5px solid rgba(255,255,255,.25);display:inline-flex;align-items:center;gap:8px;transition:background .2s,transform .15s;font-family:'Bricolage Grotesque',sans-serif}
+.boa:hover{background:rgba(255,255,255,.06);transform:translateY(-2px)}
+.tr{display:flex;gap:20px;flex-wrap:wrap;padding-top:18px;border-top:1px solid rgba(255,255,255,.1)}
+.ti{display:flex;align-items:center;gap:6px;font-size:.79rem;color:rgba(255,255,255,.45);font-weight:500}
+
+/* HERO VISUAL */
+.hvc{position:relative;width:100%;max-width:460px;margin:0 auto}
+.hvm{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:24px;backdrop-filter:blur(10px)}
+.hvmt{font-size:.67rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:16px}
+.ps-list{display:flex;flex-direction:column;gap:0}
+.ps-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.ps-item:last-child{border-bottom:none}
+.ps-num{width:32px;height:32px;border-radius:50%;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-size:.75rem;font-weight:700;color:var(--amber);flex-shrink:0}
+.ps-label{font-size:.83rem;font-weight:600;color:white}
+.ps-sub{font-size:.68rem;color:rgba(255,255,255,.38)}
+.hvd{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+.hvsr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.hvs{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px;text-align:center}
+.hvs-v{font-family:'Bricolage Grotesque',sans-serif;font-size:1.1rem;font-weight:800;color:var(--amber);line-height:1}
+.hvs-l{font-size:.63rem;color:rgba(255,255,255,.38);margin-top:4px;line-height:1.3}
+.hfc{position:absolute;background:var(--navy-mid);border:1px solid rgba(245,158,11,.2);border-radius:12px;padding:12px 15px;animation:fl 4s ease-in-out infinite;z-index:3}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.hfc-tl{top:-16px;left:-18px;min-width:138px;animation-delay:.5s}
+.hfc-br{bottom:-14px;right:-14px;min-width:148px;animation-delay:1.8s}
+.hfcl{font-size:.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:4px}
+.hfcv{font-family:'Bricolage Grotesque',sans-serif;font-size:1.2rem;font-weight:900;color:var(--amber)}
+.hfcs{font-size:.64rem;color:rgba(255,255,255,.35);margin-top:2px}
+
+/* SECTIONS */
+section{padding:88px 5%}
+.mw{max-width:1200px;margin:0 auto}
+.ew{display:inline-block;font-size:.71rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:12px}
+.st{font-size:clamp(1.9rem,3vw,2.6rem);font-weight:800;color:var(--dark);letter-spacing:-.8px;margin-bottom:14px}
+.ss{font-size:.95rem;color:var(--muted);line-height:1.75;max-width:560px;margin-bottom:48px}
+.cnt{text-align:center}.cnt .ss{margin:0 auto 48px}
+
+/* PROBLEM */
+.prob-sec{background:var(--light);padding:80px 5%}
+.prob-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.pltag{display:inline-flex;align-items:center;gap:6px;background:var(--amber-light);border:1px solid rgba(245,158,11,.3);border-radius:100px;padding:5px 12px;font-size:.73rem;color:var(--amber-dark);font-weight:600;margin-bottom:18px}
+.prob-inner h2{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(1.8rem,3vw,2.4rem);font-weight:800;color:var(--dark);letter-spacing:-.8px;margin-bottom:14px}
+.prob-inner h2 em{color:var(--amber-dark);font-style:normal}
+.plb{font-size:.92rem;color:var(--muted);line-height:1.78;margin-bottom:16px}
+.sol-callout{background:var(--navy);border-radius:14px;padding:22px 24px}
+.sc-tag{font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);margin-bottom:8px}
+.sol-callout p{font-size:.9rem;color:rgba(255,255,255,.75);line-height:1.65;margin:0}
+.pgd{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pgi{background:white;border:1px solid var(--border);border-radius:10px;padding:14px 16px;transition:border-color .2s,transform .2s}
+.pgi:hover{border-color:var(--amber);transform:translateY(-2px)}
+.pgi-ic{font-size:1.1rem;margin-bottom:6px}
+.pgi-tx{font-size:.81rem;color:var(--mid);line-height:1.5}
+.pgi-tx strong{color:var(--dark);font-weight:600}
+
+/* LIFECYCLE */
+.lc-sec{background:var(--navy);padding:80px 5%;position:relative;overflow:hidden}
+.lc-sec::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(245,158,11,.06),transparent 60%);pointer-events:none}
+.lc-inner{max-width:1100px;margin:0 auto;position:relative}
+.lc-hd{text-align:center;margin-bottom:52px}
+.lc-hd h2{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(1.8rem,3vw,2.4rem);font-weight:800;color:white;letter-spacing:-.8px;margin-bottom:10px}
+.lc-hd p{font-size:.93rem;color:rgba(255,255,255,.5);max-width:580px;margin:0 auto}
+.lc-row1{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-bottom:0;position:relative}
+.lc-row1::after{content:'';position:absolute;top:27px;left:12%;right:12%;height:2px;background:linear-gradient(90deg,var(--amber),rgba(245,158,11,.2));border-radius:2px;z-index:0}
+.lc-row2{display:grid;grid-template-columns:repeat(3,1fr);gap:0;max-width:660px;margin:32px auto 0;position:relative}
+.lc-row2::after{content:'';position:absolute;top:27px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,rgba(245,158,11,.2),var(--amber),rgba(245,158,11,.2));border-radius:2px;z-index:0}
+.lc-step{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 8px;position:relative;z-index:1}
+.lcs-circle{width:54px;height:54px;border-radius:50%;background:var(--navy-light);border:2px solid rgba(245,158,11,.3);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:12px;transition:border-color .2s,background .2s}
+.lc-step:hover .lcs-circle{border-color:var(--amber);background:rgba(245,158,11,.1)}
+.lcs-name{font-family:'Bricolage Grotesque',sans-serif;font-size:.8rem;font-weight:700;color:white;line-height:1.3}
+.lc-meta{text-align:center;margin-top:36px;display:flex;flex-direction:column;gap:12px;align-items:center}
+.lc-meta-pills{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.lc-pill{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.22);border-radius:100px;padding:7px 16px;font-size:.8rem;color:var(--amber);font-weight:500}
+.lc-scale{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 24px;font-size:.84rem;color:rgba(255,255,255,.55)}
+.lc-scale strong{color:white}
+
+/* FEATURES */
+.feat-sec{background:var(--white)}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1200px;margin:0 auto}
+.fc{background:var(--light);border-radius:16px;border:1px solid var(--border);padding:26px 24px;transition:transform .2s,box-shadow .2s,border-color .2s;position:relative;overflow:hidden}
+.fc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0;background:linear-gradient(90deg,var(--amber),var(--amber-dark))}
+.fc:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--amber)}
+.fc-num{font-family:'Bricolage Grotesque',sans-serif;font-size:2.5rem;font-weight:900;color:var(--border);position:absolute;top:12px;right:16px;line-height:1}
+.fc-icon{width:48px;height:48px;border-radius:13px;background:var(--amber-light);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:14px}
+.fc h3{font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;font-weight:800;color:var(--dark);margin-bottom:8px;line-height:1.25}
+.fc p{font-size:.83rem;color:var(--muted);line-height:1.6}
+.feat-extras{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:1200px;margin:20px auto 0}
+.fe{background:var(--light);border:1px solid var(--border);border-radius:11px;padding:14px 16px;display:flex;align-items:center;gap:12px;transition:border-color .2s}
+.fe:hover{border-color:var(--amber)}
+.fe-icon{width:34px;height:34px;border-radius:8px;background:var(--amber-light);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.fe-text{font-size:.84rem;color:var(--mid)}
+
+/* COMPARISON */
+.cmp-sec{background:var(--navy);padding:80px 5%;position:relative;overflow:hidden}
+.cmp-sec::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(245,158,11,.05),transparent 55%);pointer-events:none}
+.cmp-inner{max-width:900px;margin:0 auto;position:relative}
+.cmp-inner h2{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(1.8rem,3vw,2.4rem);font-weight:800;color:white;letter-spacing:-.8px;margin-bottom:10px}
+.cmp-sub{font-size:.93rem;color:rgba(255,255,255,.5);margin-bottom:44px}
+.ctable{border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+.ct-head{display:grid;grid-template-columns:2fr 1.2fr 1.4fr;background:rgba(255,255,255,.06)}
+.ct-head .ch{padding:16px 20px;font-family:'Bricolage Grotesque',sans-serif;font-size:.76rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.ct-head .ch.hl{background:rgba(245,158,11,.12);color:var(--amber)}
+.ct-row{display:grid;grid-template-columns:2fr 1.2fr 1.4fr;border-top:1px solid rgba(255,255,255,.06)}
+.ct-row:nth-child(odd){background:rgba(255,255,255,.02)}
+.ct-row:hover{background:rgba(255,255,255,.04)}
+.ct-cell{padding:14px 20px;font-size:.85rem;display:flex;align-items:center}
+.ct-cell.metric{font-weight:600;color:rgba(255,255,255,.75)}
+.ct-cell.trad{color:rgba(255,255,255,.38);font-size:.82rem}
+.ct-cell.good{color:#4ADE80;font-weight:700;font-size:.86rem;background:rgba(74,222,128,.04);gap:6px}
+.ct-cell.good::before{content:'✓';font-size:.72rem}
+
+/* CALCULATOR */
+.calc-sec{background:var(--light);padding:80px 5%}
+.calc-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.calc-left h2{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(1.8rem,3vw,2.3rem);font-weight:800;color:var(--dark);letter-spacing:-.8px;margin-bottom:10px}
+.calc-left p{font-size:.92rem;color:var(--muted);line-height:1.75;margin-bottom:16px}
+.calc-note{font-size:.76rem;color:var(--muted);font-style:italic}
+.calc-card{background:var(--navy);border-radius:20px;padding:32px;box-shadow:var(--shadow-lg)}
+.calc-lbl{font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:10px}
+.calc-iw{position:relative;margin-bottom:8px}
+.calc-pfx{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-family:'Bricolage Grotesque',sans-serif;font-size:1.1rem;font-weight:700;color:var(--amber)}
+.calc-input{width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 12px 12px 36px;font-family:'Bricolage Grotesque',sans-serif;font-size:1.2rem;font-weight:700;color:white;outline:none;transition:border-color .2s}
+.calc-input:focus{border-color:var(--amber)}
+.calc-slider{width:100%;-webkit-appearance:none;height:6px;border-radius:3px;background:rgba(255,255,255,.1);outline:none;margin:12px 0 6px;cursor:pointer}
+.calc-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--amber);cursor:pointer;box-shadow:0 2px 8px rgba(245,158,11,.4)}
+.calc-slider-lbs{display:flex;justify-content:space-between;font-size:.66rem;color:rgba(255,255,255,.28);margin-bottom:20px}
+.calc-div{height:1px;background:rgba(255,255,255,.08);margin:20px 0}
+.tat-row{display:flex;gap:8px;margin-bottom:20px}
+.tat-btn{flex:1;padding:8px 4px;border-radius:8px;border:1.5px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.45);font-family:'Bricolage Grotesque',sans-serif;font-size:.76rem;font-weight:600;cursor:pointer;transition:all .2s;text-align:center}
+.tat-btn.active{background:rgba(245,158,11,.15);border-color:var(--amber);color:var(--amber)}
+.calc-res-lbl{font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:8px}
+.calc-res{font-family:'Bricolage Grotesque',sans-serif;font-size:2.8rem;font-weight:900;color:var(--amber);line-height:1;margin-bottom:4px;transition:all .3s}
+.calc-res-sub{font-size:.76rem;color:rgba(255,255,255,.38);margin-bottom:16px}
+.calc-bk{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cb{background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px}
+.cb-v{font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;font-weight:700;color:white}
+.cb-l{font-size:.65rem;color:rgba(255,255,255,.32);margin-top:2px}
+
+/* BENEFITS */
+.ben-sec{background:white}
+.ben-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;max-width:1200px;margin:0 auto}
+.ben-card{background:var(--light);border-radius:14px;border:1px solid var(--border);padding:22px 18px;transition:transform .2s,box-shadow .2s,border-color .2s}
+.ben-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--amber)}
+.ben-icon{font-size:1.7rem;margin-bottom:10px}
+.ben-card h4{font-family:'Bricolage Grotesque',sans-serif;font-size:.88rem;font-weight:700;color:var(--dark);margin-bottom:5px;line-height:1.3}
+.ben-card p{font-size:.78rem;color:var(--muted);line-height:1.5}
+
+/* CTA */
+.cta-sec{background:var(--navy);padding:88px 5%;text-align:center;position:relative;overflow:hidden}
+.cta-sec::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.1),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.cta-sec h2{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:800;color:white;letter-spacing:-1px;margin-bottom:14px;position:relative}
+.cta-sec h2 em{color:var(--amber);font-style:normal}
+.cta-sec p{font-size:.95rem;color:rgba(255,255,255,.48);margin-bottom:34px;position:relative}
+.ctab{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;margin-bottom:28px}
+.bw{background:var(--amber);color:var(--navy);padding:13px 26px;border-radius:10px;font-weight:700;font-size:.92rem;font-family:'Bricolage Grotesque',sans-serif;box-shadow:0 4px 16px rgba(245,158,11,.3);transition:transform .15s,box-shadow .2s}
+.bw:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(245,158,11,.35)}
+.bgh{background:transparent;color:white;padding:13px 26px;border-radius:10px;font-weight:600;font-size:.92rem;border:1.5px solid rgba(255,255,255,.26);transition:background .2s;font-family:'Bricolage Grotesque',sans-serif}
+.bgh:hover{background:rgba(255,255,255,.07)}
+.cs{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;position:relative;margin-bottom:52px}
+.cs a{color:rgba(255,255,255,.4);font-size:.82rem;display:flex;align-items:center;gap:6px;transition:color .2s}
+.cs a:hover{color:white}
+.op{padding-top:44px;border-top:1px solid rgba(255,255,255,.07);position:relative}
+.opl{font-family:'Bricolage Grotesque',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.26);margin-bottom:18px}
+.opr{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.opi{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:13px 18px;display:flex;align-items:center;gap:10px;transition:background .2s,border-color .2s}
+.opi:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14)}
+.opn{font-family:'Bricolage Grotesque',sans-serif;font-size:.82rem;font-weight:700;color:white}
+.ops{font-size:.66rem;color:rgba(255,255,255,.34)}
+
+/* FOOTER */
+footer{background:#060E1A;padding:38px 5% 22px;border-top:1px solid rgba(255,255,255,.06)}
+.ftr{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:20px}
+.ftl{font-family:'Bricolage Grotesque',sans-serif;font-size:1.3rem;font-weight:800}
+.ftl .b{color:var(--sc-blue)}.ftl .g{color:var(--sc-green)}
+.ftt{font-size:.75rem;color:rgba(255,255,255,.28);margin-top:3px}
+.ftlk{display:flex;gap:20px;flex-wrap:wrap}
+.ftlk a{font-size:.8rem;color:rgba(255,255,255,.34);transition:color .2s}
+.ftlk a:hover{color:white}
+.ftb{padding-top:16px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.ftb p{font-size:.72rem;color:rgba(255,255,255,.16)}
+.isp{display:flex;align-items:center;gap:5px;font-size:.66rem;color:rgba(255,255,255,.28)}
+.isd{width:5px;height:5px;background:var(--amber);border-radius:50%}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s,transform .6s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+@media(max-width:1024px){
+  .hero,.prob-inner,.calc-inner{grid-template-columns:1fr}
+  .hr{display:none}
+  .lc-row1{grid-template-columns:repeat(2,1fr)}
+  .lc-row1::after,.lc-row2::after{display:none}
+  .lc-row2{grid-template-columns:repeat(2,1fr);max-width:100%}
+  .feat-grid{grid-template-columns:1fr 1fr}
+  .ben-grid{grid-template-columns:1fr 1fr}
+  .feat-extras{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .feat-grid,.ben-grid,.pgd,.feat-extras{grid-template-columns:1fr}
+  .ct-head,.ct-row{font-size:.78rem}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div><div class="lt"><span class="b">sprint</span><span class="g">cart</span>™</div><div class="lb">Enterprise Customer Engagement Platform</div></div>
+  <div class="nr"><a href="#" class="nbk">← All Solutions</a><a href="#" class="nct">📅 Book a Demo</a></div>
+</nav>
+
+<!-- 1. HERO -->
+<section class="hero">
+  <div class="hgrid"></div>
+  <div class="hl">
+    <div class="bc"><a href="#" style="color:rgba(255,255,255,.4)">sprintcart</a> <span>›</span> Solutions <span>›</span> <span class="cur">Supply Junction</span></div>
+    <div class="hbg"><span class="bdot"></span> Procurement · Inventory · Indenting · Fulfilment</div>
+    <h1>Enterprise<br>Procurement,<br><span class="ac">Simplified</span></h1>
+    <div class="htag">From demand to delivery — on a single unified dashboard</div>
+    <p class="hero-sub">Supply Junction automates the complete procurement-to-fulfilment lifecycle — indent creation, multi-level approvals, vendor management, inventory tracking, and last-mile delivery — built to serve 100 to 50,000+ employees across locations.</p>
+    <div class="ha">
+      <a href="#" class="bpa">📅 Book a Demo</a>
+      <a href="#features" class="boa">Explore Features →</a>
+    </div>
+    <div class="tr">
+      <div class="ti">🏢 100 to 50,000+ employees</div>
+      <div class="ti">📱 iOS & Android apps</div>
+      <div class="ti">🔒 ISO 27001:2022 Certified</div>
+    </div>
+  </div>
+  <div class="hr">
+    <div class="hvc">
+      <div class="hvm">
+        <div class="hvmt">Procurement Lifecycle</div>
+        <div class="ps-list">
+          <div class="ps-item"><div class="ps-num">1</div><div><div class="ps-label">Request for Quote (RFQ)</div><div class="ps-sub">Indent creation by branches or teams</div></div></div>
+          <div class="ps-item"><div class="ps-num">2</div><div><div class="ps-label">Vendor Selection</div><div class="ps-sub">Multi-vendor, multi-category management</div></div></div>
+          <div class="ps-item"><div class="ps-num">3</div><div><div class="ps-label">Purchase Order Generation</div><div class="ps-sub">Automated PO creation & approval</div></div></div>
+          <div class="ps-item"><div class="ps-num">4</div><div><div class="ps-label">Production & Inventory</div><div class="ps-sub">Real-time stock & production tracking</div></div></div>
+          <div class="ps-item"><div class="ps-num">5</div><div><div class="ps-label">Approvals</div><div class="ps-sub">Up to 3-level approval workflows</div></div></div>
+          <div class="ps-item"><div class="ps-num">6</div><div><div class="ps-label">Logistics + Last-Mile Delivery</div><div class="ps-sub">Nationwide & international fulfilment</div></div></div>
+        </div>
+        <div class="hvd"></div>
+        <div class="hvsr">
+          <div class="hvs"><div class="hvs-v">&lt;60s</div><div class="hvs-l">Monthly indents placed</div></div>
+          <div class="hvs"><div class="hvs-v">&lt;10d</div><div class="hvs-l">Turnaround time</div></div>
+          <div class="hvs"><div class="hvs-v">7</div><div class="hvs-l">Layer MIS</div></div>
+        </div>
+      </div>
+      <div class="hfc hfc-tl"><div class="hfcl">Employees Served</div><div class="hfcv">50,000+</div><div class="hfcs">Across all locations</div></div>
+      <div class="hfc hfc-br"><div class="hfcl">Indent Status</div><div class="hfcv">Real-time</div><div class="hfcs">Was: up to 3 days</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. PROBLEM -->
+<div class="prob-sec">
+  <div class="prob-inner">
+    <div class="reveal">
+      <div class="pltag">⚠️ The Problem</div>
+      <h2>Procurement slowed by <em>fragmented, manual processes</em></h2>
+      <p class="plb">For enterprises with nationwide networks, procurement is often slowed down by fragmented processes, manual coordination, delayed approvals, and limited visibility across locations. Traditional systems rely heavily on spreadsheets, emails, and follow-ups — resulting in inefficiencies, higher costs, delayed fulfilment, and poor decision-making.</p>
+      <p class="plb">As scale increases, organisations need a centralised, automated, and data-driven procurement platform that can manage everything from demand to delivery without operational friction.</p>
+      <div class="sol-callout">
+        <div class="sc-tag">The Solution</div>
+        <p>Supply Junction brings every function onto a single, unified dashboard — designed to efficiently serve indent requests from 100 to 50,000+ employees, across multiple locations, business units, and verticals.</p>
+      </div>
+    </div>
+    <div class="pgd reveal d1">
+      <div class="pgi"><div class="pgi-ic">📊</div><div class="pgi-tx"><strong>Fragmented processes</strong> with no centralised system for raising or tracking indents.</div></div>
+      <div class="pgi"><div class="pgi-ic">👤</div><div class="pgi-tx"><strong>Manual coordination</strong> via spreadsheets, emails, and endless follow-ups.</div></div>
+      <div class="pgi"><div class="pgi-ic">🕐</div><div class="pgi-tx"><strong>Delayed approvals</strong> — indent status updates taking up to 3 days.</div></div>
+      <div class="pgi"><div class="pgi-ic">👁️</div><div class="pgi-tx"><strong>Limited visibility</strong> across locations, vendors, and spend.</div></div>
+      <div class="pgi"><div class="pgi-ic">💸</div><div class="pgi-tx"><strong>Higher costs</strong> from inefficiencies, stockouts, and delayed fulfilment.</div></div>
+      <div class="pgi"><div class="pgi-ic">📉</div><div class="pgi-tx"><strong>Poor decision-making</strong> — MIS reporting taking up to 7 days.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. LIFECYCLE -->
+<div class="lc-sec">
+  <div class="lc-inner">
+    <div class="lc-hd reveal">
+      <span class="ew">End-to-End Workflow</span>
+      <h2>Supply Junction digitises every stage of procurement</h2>
+      <p>From indent creation to last-mile delivery — every step automated, tracked, and visible on a single dashboard.</p>
+    </div>
+    <div class="lc-row1 reveal d1">
+      <div class="lc-step"><div class="lcs-circle">📋</div><div class="lcs-name">Request for Quote (RFQ)</div></div>
+      <div class="lc-step"><div class="lcs-circle">🤝</div><div class="lcs-name">Vendor Selection</div></div>
+      <div class="lc-step"><div class="lcs-circle">📄</div><div class="lcs-name">Purchase Order Generation</div></div>
+      <div class="lc-step"><div class="lcs-circle">🏭</div><div class="lcs-name">Production & Inventory</div></div>
+    </div>
+    <div class="lc-row2 reveal d2">
+      <div class="lc-step"><div class="lcs-circle">🚚</div><div class="lcs-name">Logistics + Delivery</div></div>
+      <div class="lc-step"><div class="lcs-circle">✅</div><div class="lcs-name">Approvals</div></div>
+      <div class="lc-step"><div class="lcs-circle">📊</div><div class="lcs-name">Management & MIS</div></div>
+    </div>
+    <div class="lc-meta reveal d3">
+      <div class="lc-meta-pills">
+        <div class="lc-pill">Real-time notifications at 4 key stages</div>
+        <div class="lc-pill">Up to 3-level approval workflows</div>
+        <div class="lc-pill">Seven-layer MIS for complete visibility</div>
+      </div>
+      <div class="lc-scale">Built to serve indent requests from <strong>100 to 50,000+ employees</strong> · Multiple locations, business units & verticals</div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. FEATURES -->
+<section class="feat-sec" id="features">
+  <div class="mw">
+    <div class="cnt reveal">
+      <span class="ew">Key Features</span>
+      <h2 class="st">Seven capabilities. One unified platform.</h2>
+      <p class="ss">Supply Junction digitises and automates every layer of enterprise procurement — from indent to fulfilment.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="fc reveal d1">
+        <div class="fc-num">1</div>
+        <div class="fc-icon">🖥️</div>
+        <h3>Centralised Web-to-Procure Workflow</h3>
+        <p>A single online platform to raise, approve, track, and fulfil indents — eliminating manual processes and scattered communication across teams and locations.</p>
+      </div>
+      <div class="fc reveal d2">
+        <div class="fc-num">2</div>
+        <div class="fc-icon">📊</div>
+        <h3>Control & Admin Dashboard</h3>
+        <p>Real-time visibility into indents, approvals, fulfilment, and performance — with complete control for Head Office and procurement teams.</p>
+      </div>
+      <div class="fc reveal d3">
+        <div class="fc-num">3</div>
+        <div class="fc-icon">👥</div>
+        <h3>Multi-User Access with Role-Based Rights</h3>
+        <p>Customised access and authorisation controls for users across locations — leading to faster ordering with clear accountability.</p>
+      </div>
+      <div class="fc reveal d1">
+        <div class="fc-num">4</div>
+        <div class="fc-icon">🔔</div>
+        <h3>Automated Notifications</h3>
+        <p>Real-time updates to indenters and stakeholders at every stage — resulting in zero follow-ups, faster turnaround, and higher transparency.</p>
+      </div>
+      <div class="fc reveal d2">
+        <div class="fc-num">5</div>
+        <div class="fc-icon">📦</div>
+        <h3>Inventory & Production Management</h3>
+        <p>Track stock levels and production status in real time — avoiding stock-outs and ensuring immediate fulfilment across all locations.</p>
+      </div>
+      <div class="fc reveal d3">
+        <div class="fc-num">6</div>
+        <div class="fc-icon">🤝</div>
+        <h3>Supply Partner Management</h3>
+        <p>Manage multiple vendors, product categories, and delivery locations with flexibility and consistency across all procurement operations.</p>
+      </div>
+    </div>
+    <div class="feat-grid" style="grid-template-columns:1fr;max-width:400px;margin:20px auto 0">
+      <div class="fc reveal">
+        <div class="fc-num">7</div>
+        <div class="fc-icon" style="margin:0 auto 14px">📈</div>
+        <h3 style="text-align:center">Seven-Layer MIS & Spend Analytics</h3>
+        <p style="text-align:center">In-depth reporting on spends, trends, performance, and utilisation — enabling informed, data-driven business decisions.</p>
+      </div>
+    </div>
+    <div class="feat-extras">
+      <div class="fe reveal d1"><div class="fe-icon">📱</div><div class="fe-text">Mobile application — Exclusive Microsite + Mobile Apps (iOS & Android)</div></div>
+      <div class="fe reveal d2"><div class="fe-icon">🌱</div><div class="fe-text">Access to TreeLife store — a brand of 100% recycled stationery products</div></div>
+      <div class="fe reveal d3"><div class="fe-icon">💰</div><div class="fe-text">Budget Management Alerts — monitor spend and budget utilisation across all verticals</div></div>
+      <div class="fe reveal d4"><div class="fe-icon">🚚</div><div class="fe-text">Multi-location delivery and logistic management · 24×7×365 fulfilment function</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. COMPARISON -->
+<div class="cmp-sec">
+  <div class="cmp-inner">
+    <div class="reveal">
+      <span class="ew">Measurable Impact</span>
+      <h2>Supply Junction vs Traditional Systems</h2>
+      <p class="cmp-sub">Real numbers from enterprises that switched. The difference is not marginal — it is transformational.</p>
+    </div>
+    <div class="ctable reveal d1">
+      <div class="ct-head">
+        <div class="ch">Metric</div>
+        <div class="ch">Traditional Systems</div>
+        <div class="ch hl">✦ Supply Junction</div>
+      </div>
+      <div class="ct-row"><div class="ct-cell metric">Procurement Process</div><div class="ct-cell trad">Manual, unstructured, data-poor</div><div class="ct-cell good">Automated, structured, data-rich</div></div>
+      <div class="ct-row"><div class="ct-cell metric">Collating Monthly Requirements</div><div class="ct-cell trad">~7.7 hours</div><div class="ct-cell good">Under 60 seconds</div></div>
+      <div class="ct-row"><div class="ct-cell metric">Placing Monthly Indents</div><div class="ct-cell trad">~40 minutes</div><div class="ct-cell good">Under 60 seconds</div></div>
+      <div class="ct-row"><div class="ct-cell metric">Indent Status Updates</div><div class="ct-cell trad">Up to 3 days</div><div class="ct-cell good">Real-time</div></div>
+      <div class="ct-row"><div class="ct-cell metric">MIS Reporting</div><div class="ct-cell trad">Up to 7 days</div><div class="ct-cell good">Real-time</div></div>
+      <div class="ct-row"><div class="ct-cell metric">Accessibility</div><div class="ct-cell trad">Emails & manual messaging</div><div class="ct-cell good">Exclusive Microsite + Mobile Apps (iOS & Android)</div></div>
+      <div class="ct-row"><div class="ct-cell metric">Turnaround Time</div><div class="ct-cell trad">~21 days</div><div class="ct-cell good">Under 10 days</div></div>
+      <div class="ct-row"><div class="ct-cell metric">Overall Performance</div><div class="ct-cell trad">High effort, high cost</div><div class="ct-cell good">High efficiency, savings, faster delivery</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. CALCULATOR -->
+<section class="calc-sec">
+  <div class="calc-inner">
+    <div class="calc-left reveal">
+      <span class="ew">Opportunity for More</span>
+      <h2>Calculate your Incremental Revenue Opportunity</h2>
+      <p>By improving procurement turnaround time, Supply Junction unlocks hidden revenue potential. Enter your annual sales to see the incremental opportunity based on TAT efficiency gains.</p>
+      <p class="calc-note">EPM efficiency calculated on 300 business days a year.</p>
+    </div>
+    <div class="calc-card reveal d1">
+      <div class="calc-lbl">Annual Sales (in Crores ₹)</div>
+      <div class="calc-iw">
+        <span class="calc-pfx">₹</span>
+        <input type="number" class="calc-input" id="salesInput" value="2000" min="100" max="100000" oninput="syncSlider(this.value);calcRevenue()"/>
+      </div>
+      <input type="range" class="calc-slider" id="salesSlider" min="100" max="20000" value="2000" oninput="syncInput(this.value);calcRevenue()"/>
+      <div class="calc-slider-lbs"><span>₹100 Cr</span><span>₹5,000 Cr</span><span>₹10,000 Cr</span><span>₹20,000 Cr</span></div>
+      <div class="calc-lbl">TAT Efficiency Gain (days saved)</div>
+      <div class="tat-row">
+        <div class="tat-btn active" onclick="setTAT(3,this)">3 days</div>
+        <div class="tat-btn" onclick="setTAT(5,this)">5 days</div>
+        <div class="tat-btn" onclick="setTAT(7,this)">7 days</div>
+        <div class="tat-btn" onclick="setTAT(11,this)">11 days</div>
+      </div>
+      <div class="calc-div"></div>
+      <div class="calc-res-lbl">Incremental Revenue Opportunity</div>
+      <div class="calc-res" id="calcResult">₹6.67 Cr</div>
+      <div class="calc-res-sub">Based on your inputs · 300 business days per year</div>
+      <div class="calc-bk">
+        <div class="cb"><div class="cb-v" id="dailyRev">—</div><div class="cb-l">Daily Revenue</div></div>
+        <div class="cb"><div class="cb-v" id="tatDays">3 days</div><div class="cb-l">TAT Days Saved</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. BENEFITS -->
+<section class="ben-sec">
+  <div class="mw">
+    <div class="cnt reveal">
+      <span class="ew">Benefits</span>
+      <h2 class="st">What your team gains from day one</h2>
+      <p class="ss">Supply Junction delivers control, efficiency, and visibility across every layer of your procurement operations.</p>
+    </div>
+    <div class="ben-grid">
+      <div class="ben-card reveal d1"><div class="ben-icon">🎮</div><h4>Eliminates manual spreadsheets</h4><p>Complete control over the entire indent-to-fulfilment process — no more scattered spreadsheets or email chains.</p></div>
+      <div class="ben-card reveal d2"><div class="ben-icon">⚡</div><h4>Automated indent collection</h4><p>Automated collection and collation of indents — a single window to monitor all indent progress in real time.</p></div>
+      <div class="ben-card reveal d3"><div class="ben-icon">💬</div><h4>Zero manual follow-ups</h4><p>Automated communication between indenter and HO eliminates follow-up overhead across teams and locations.</p></div>
+      <div class="ben-card reveal d4"><div class="ben-icon">✅</div><h4>Efficient 3-level approvals</h4><p>Structured workflows with up to three approval levels — faster ordering with clear accountability at every step.</p></div>
+      <div class="ben-card reveal d1"><div class="ben-icon">📊</div><h4>Robust MIS for decisions</h4><p>Seven-layer MIS reporting enables effective management decisions with data on spends, trends, and utilisation.</p></div>
+      <div class="ben-card reveal d2"><div class="ben-icon">📦</div><h4>Maintained stock for fulfilment</h4><p>Maintains stock levels for immediate fulfilment — avoiding stockouts and production delays across the network.</p></div>
+      <div class="ben-card reveal d3"><div class="ben-icon">💰</div><h4>Budget utilisation visibility</h4><p>Information on spend to monitor budget utilisation across all verticals, locations, and product categories.</p></div>
+      <div class="ben-card reveal d4"><div class="ben-icon">🚚</div><h4>24×7×365 fulfilment</h4><p>Control on material movement for on-time delivery — with last-mile fulfilment across India and international locations.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec">
+  <h2>Ready to move from <em>spreadsheets to scale?</em></h2>
+  <p>Join enterprises already using Supply Junction to automate procurement from demand to delivery.</p>
+  <div class="ctab">
+    <a href="#" class="bw">📅 Book a Demo</a>
+    <a href="#" class="bgh">Message Us →</a>
+  </div>
+  <div class="cs">
+    <a href="tel:+912267449000">📞 +91 22 6744 9000</a>
+    <a href="mailto:info@sprintcart.in">✉️ info@sprintcart.in</a>
+    <a href="https://sprintcart.in">🌐 www.sprintcart.in</a>
+  </div>
+  <div class="op">
+    <div class="opl">Explore other sprintcart solutions</div>
+    <div class="opr">
+      <a href="#" class="opi"><span style="font-size:1.1rem">💡</span><div><div class="opn">Genius Card</div><div class="ops">NFC Digital Engagement</div></div></a>
+      <a href="#" class="opi"><span style="font-size:1.1rem">🔒</span><div><div class="opn">DigiSafe</div><div class="ops">Digital Asset Management</div></div></a>
+      <a href="#" class="opi"><span style="font-size:1.1rem">🎁</span><div><div class="opn">Jubilee</div><div class="ops">Rewards & Loyalty</div></div></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="ftr">
+    <div><div class="ftl"><span class="b">sprint</span><span class="g">cart</span>™</div><div class="ftt">Enterprise Customer Engagement Platform · Mumbai, India</div></div>
+    <div class="ftlk"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Refund Policy</a><a href="#">Contact Us</a><a href="#">Book a Demo</a></div>
+  </div>
+  <div class="ftb">
+    <p>© 2022–25 Pentaforce Digital Solutions Pvt. Ltd. All rights reserved.</p>
+    <div class="isp"><span class="isd"></span> ISO/IEC 27001:2022 Certified</div>
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(e => e.forEach(el => { if(el.isIntersecting) el.target.classList.add('visible'); }), {threshold:.1});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+window.addEventListener('scroll', () => document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 20));
+
+let tatDays = 3;
+function syncSlider(v){ document.getElementById('salesSlider').value = Math.min(v,20000); }
+function syncInput(v){ document.getElementById('salesInput').value = v; }
+function setTAT(d, btn){
+  tatDays = d;
+  document.querySelectorAll('.tat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tatDays').textContent = d + ' days';
+  calcRevenue();
+}
+function calcRevenue(){
+  const sales = parseFloat(document.getElementById('salesInput').value) || 0;
+  const daily = sales / 300;
+  const opp = daily * tatDays;
+  document.getElementById('calcResult').textContent = '\u20b9' + opp.toFixed(2) + ' Cr';
+  document.getElementById('dailyRev').textContent = '\u20b9' + daily.toFixed(2) + ' Cr';
+}
+calcRevenue();
+document.getElementById('tatDays').textContent = tatDays + ' days';
+</script>
+</body>
+</html>
